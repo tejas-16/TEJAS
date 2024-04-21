@@ -6,7 +6,7 @@ smtp_server = "smtp.gmail.com"
 USERNAME = os.environ.get('USER_EMAIL')
 PASSWORD = os.environ.get('USER_PASSWORD')
 
-message = """\ 
+message = """ 
 Subject: Unix Fastack Sanity Check
 
 
@@ -17,6 +17,6 @@ Please help me with the sanity check.
 context = ssl.create_default_context()
 
 with smtplib.SMTP_SSL(smtp_server, port, context =context) as server:
-    server.loginin(USERNAME,PASSWORD)
+    server.login(USERNAME,PASSWORD)
     server.sendmail(USERNAME,PASSWORD,message)   
     
