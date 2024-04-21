@@ -1,25 +1,27 @@
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+name: Send Email
 
-def send_email(subject, message, from_email, to_email, smtp_server, smtp_port, smtp_username, smtp_password):
-    msg = MIMEMultipart()
-    msg['tejasvinchurkar16@gmail.com'] = from_email
-    msg['tejasvinchurkar.scoe.comp@gmail.com'] = to_email
-    msg['Subject: Unix Fastack Sanity Checkbject'] = subject
-    msg.attach(MIMEText(message, "Hello Team, /Please help me with the sanity check."))
+on:
+  workflow_dispatch:  # This event allows you to manually trigger the workflow
 
-    server = smtplib.SMTP(smtp_server, smtp_port)
-    server.starttls()
-    server.login(smtp_username, smtp_password)
-    server.sendmail(from_email, to_email, msg.as_string())
-    server.quit()
+jobs:
+  send_email:
+    runs-on: ubuntu-latest
 
-# Example usage:
-send_email("Subject: Unix Fastack Sanity Checkbject", "Hello Team,/Please help me with the sanity check.", "tejasvinchurkar16@example.com", "tejasvinchurkar.scoe.comp@example.com", "smtp.gmail.com", 587, "smtp_username", "smtp_password")
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # Choose the Python version you want to use
 
-
-    
-    
-   
+      - name: Send email
+        run: python send_email.py  # Replace with the path to your Python script
+        env:
+          SMTP_SERVER: smtp.example.com
+          SMTP_PORT: 587
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}  # Store sensitive information like this as secrets in your repository settings
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          FROM_EMAIL: from@example.com
+          TO_EMAIL: to@example.com
